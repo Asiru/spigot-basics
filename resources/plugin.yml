@@ -1,0 +1,4 @@
+name: Basics
+version: 0.0.1
+main: com.neo.basics.Basics
+authors: [Neo]
