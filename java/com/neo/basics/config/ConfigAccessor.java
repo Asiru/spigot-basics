@@ -18,7 +18,7 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 	protected final T plugin;
 	
 	// the Configuration object to be accessed and modified
-	protected FileConfiguration config;
+	private FileConfiguration config;
 	
 	/*
 	In short, a "dynamic" ConfigAccessor subclass is meant for reading and writing, while a non-dynamic (or static)
@@ -132,6 +132,16 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * See {@link org.bukkit.configuration.ConfigurationSection#set(String, Object)}. This method is expected to be
+	 * overridden.
+	 * @param key Path of the object to set.
+	 * @param value New value to set the path to.
+	 */
+	protected void set(String key, Object value) {
+		config.set(key, value);
 	}
 	
 	/*
