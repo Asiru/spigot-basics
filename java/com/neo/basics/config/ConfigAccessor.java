@@ -14,12 +14,23 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class ConfigAccessor<T extends JavaPlugin> {
+	// the associated JavaPlugin object
 	protected final T plugin;
+	
+	// the Configuration object to be accessed and modified
+	protected FileConfiguration config;
+	
+	/*
+	In short, a "dynamic" ConfigAccessor subclass is meant for reading and writing, while a non-dynamic (or static)
+	ConfigAccessor is only meant for reading.  Dynamic ConfigAccessors are more likely to be used.
+	 */
 	private final boolean dynamic;
+	
+	// fileName and ancestry help the class find the file it's supposed to be accessing
 	private final String fileName, ancestry;
 	
+	// the physical File object being written to
 	private File configFile;
-	protected FileConfiguration config;
 	
 	public ConfigAccessor(T plugin, boolean dynamic, String fileName, String... ancestry) {
 		this.plugin = plugin;
@@ -29,33 +40,6 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 		
 		// automatically load existing configuration or create config file when creating new object
 		reloadConfig();
-	}
-	
-	/**
-	 * Deletes the file associated with this configuration.
-	 */
-	@SuppressWarnings("unused")
-	protected void deleteConfigFile() {
-		// ignore if config file has not yet been initialized
-		// * this should never happen
-		if(configFile != null && !configFile.delete())
-			plugin.getLogger().log(Level.SEVERE, "Could not delete " + configFile.getName());
-	}
-	
-	/**
-	 * Saves the current configuration to the specified file.
-	 */
-	protected void saveConfig() {
-		// ignore if config file or configuration have not yet been initialized
-		// * this should never happen
-		if(configFile == null || config == null)
-			return;
-		try {
-			// save configuration to file
-			config.save(configFile);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -124,11 +108,36 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 		}
 	}
 	
-	// helper method for readability
-	private InputStream getResource() {
-		return plugin.getResource(fileName);
+	/**
+	 * Deletes the file associated with this configuration.
+	 */
+	protected void deleteConfigFile() {
+		// ignore if config file has not yet been initialized
+		// * this should never happen
+		if(configFile != null && !configFile.delete())
+			plugin.getLogger().log(Level.SEVERE, "Could not delete " + configFile.getName());
 	}
 	
+	/**
+	 * Saves the current configuration to the specified file.
+	 */
+	protected void saveConfig() {
+		// ignore if config file or configuration have not yet been initialized
+		// * this should never happen
+		if(configFile == null || config == null)
+			return;
+		try {
+			// save configuration to file
+			config.save(configFile);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	Copies the contents of the specified InputStream to the specified File, assuming file is not null and not a
+	directory.  If the File does not exist, it this method will attempt to create it.
+	 */
 	private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
 		if(inputStream == null || file == null)
 			throw new IOException("input stream and file cannot be null");
@@ -141,5 +150,10 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 		byte[] buffer = new byte[inputStream.available()];
 		if(inputStream.read(buffer) > 0)
 			Files.write(buffer, file);
+	}
+	
+	// helper method for readability
+	private InputStream getResource() {
+		return plugin.getResource(fileName);
 	}
 }
