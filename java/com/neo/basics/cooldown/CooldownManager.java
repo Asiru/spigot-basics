@@ -6,11 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class CooldownManager<T> {
-	private Map<T, Cooldown> cooldowns;
-	
-	public CooldownManager() {
-		this.cooldowns = new ConcurrentHashMap<>();
-	}
+	private final Map<T, Cooldown> cooldowns = new ConcurrentHashMap<>();
 	
 	public final long getCooldown(T object) {
 		if(cooldowns.containsKey(object))
@@ -29,7 +25,7 @@ public abstract class CooldownManager<T> {
 		}
 	}
 	
-	protected abstract void start(Cooldown cooldown);
+	protected abstract void start(BukkitRunnable runnable);
 	
 	private class Cooldown extends BukkitRunnable {
 		private T object;
