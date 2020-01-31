@@ -2,14 +2,14 @@ package com.neo.basics.cooldown;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class CooldownManager<T> {
 	private Map<T, Cooldown> cooldowns;
 	
 	public CooldownManager() {
-		this.cooldowns = new HashMap<>();
+		this.cooldowns = new ConcurrentHashMap<>();
 	}
 	
 	public final long getCooldown(T object) {
