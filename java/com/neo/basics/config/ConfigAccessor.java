@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public abstract class ConfigAccessor<T extends JavaPlugin> {
+public abstract class ConfigAccessor {
 	// the associated JavaPlugin object
-	protected final T plugin;
+	protected final JavaPlugin plugin;
 	
 	// the Configuration object to be accessed and modified
 	protected FileConfiguration config;
@@ -32,7 +32,7 @@ public abstract class ConfigAccessor<T extends JavaPlugin> {
 	// the physical File object being written to
 	private File configFile;
 	
-	public ConfigAccessor(T plugin, boolean dynamic, String fileName, String... ancestry) {
+	public ConfigAccessor(JavaPlugin plugin, boolean dynamic, String fileName, String... ancestry) {
 		this.plugin = plugin;
 		this.dynamic = dynamic;
 		this.fileName = fileName.endsWith(".yml") ? fileName : (fileName + ".yml");
