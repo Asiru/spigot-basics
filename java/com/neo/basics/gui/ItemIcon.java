@@ -44,16 +44,11 @@ public class ItemIcon {
 		private String displayName;
 		private List<String> lore;
 		
-		private InventoryWindow destination;
-		private Runnable onClick;
-		
 		private Builder(Material material) {
 			this.material = material;
 			this.amount = 1;
 			this.displayName = null;
 			this.lore = new ArrayList<>();
-			this.destination = null;
-			this.onClick = null;
 		}
 		
 		public Builder setAmount(int amount) {
@@ -66,18 +61,13 @@ public class ItemIcon {
 			return this;
 		}
 		
+		public Builder clearLore() {
+			this.lore.clear();
+			return this;
+		}
+		
 		public Builder addLore(String lore) {
 			this.lore.add(ChatColor.translateAlternateColorCodes('&', lore));
-			return this;
-		}
-		
-		public Builder setDestination(InventoryWindow destination) {
-			this.destination = destination;
-			return this;
-		}
-		
-		public Builder setOnClick(Runnable onClick) {
-			this.onClick = onClick;
 			return this;
 		}
 		
@@ -91,10 +81,7 @@ public class ItemIcon {
 			meta.setLore(lore);
 			display.setItemMeta(meta);
 			
-			ItemIcon result = new ItemIcon(display);
-			result.destination = this.destination;
-			result.onClick = this.onClick;
-			return result;
+			return new ItemIcon(display);
 		}
 		
 		public static Builder create(Material material) {

@@ -23,10 +23,6 @@ public class InventoryWindow {
 		player.openInventory(inventory);
 	}
 	
-	public boolean isOpen() {
-		return !inventory.getViewers().isEmpty();
-	}
-	
 	public void setSlot(int slot, ItemIcon icon) {
 		if(slot < 0 || slot >= inventory.getSize()) {
 			return;
