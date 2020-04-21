@@ -134,11 +134,16 @@ public abstract class ConfigAccessor {
 		}
 	}
 	
+	// helper method for readability
+	private InputStream getResource() {
+		return plugin.getResource(fileName);
+	}
+	
 	/*
 	Copies the contents of the specified InputStream to the specified File, assuming file is not null and not a
 	directory.  If the File does not exist, it this method will attempt to create it.
 	 */
-	private void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
+	private static void copyInputStreamToFile(InputStream inputStream, File file) throws IOException {
 		if(inputStream == null || file == null)
 			throw new IOException("input stream and file cannot be null");
 		if(file.isDirectory())
@@ -150,10 +155,5 @@ public abstract class ConfigAccessor {
 		byte[] buffer = new byte[inputStream.available()];
 		if(inputStream.read(buffer) > 0)
 			Files.write(buffer, file);
-	}
-	
-	// helper method for readability
-	private InputStream getResource() {
-		return plugin.getResource(fileName);
 	}
 }
